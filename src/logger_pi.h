@@ -75,19 +75,17 @@ public:
 
       void SetNMEASentence(wxString &sentence);
       void OnContextMenuItemCallback(int id);
-      void UpdateAuiStatus(void);
-      
-
 
 private:
-      wxWindow         *m_parent_window;
+      bool LoadConfig(void);
+      bool SaveConfig(void);
 
-//      LoggerWindow       *m_plogger_window;
-      ConfigDialog       *m_config_dialog;
+      wxWindow         *m_parent_window;
+      wxFileConfig     *m_pconfig;
+      ConfigDialog     *m_config_dialog;
       wxAuiManager     *m_AUImgr;
       int               m_show_id;
       int               m_hide_id;
-
 };
 
 

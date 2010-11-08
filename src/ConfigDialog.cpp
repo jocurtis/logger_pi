@@ -13,28 +13,42 @@ ConfigDialog::ConfigDialog( wxWindow* parent, wxWindowID id, const wxString& tit
 {
 	this->SetSizeHints( wxDefaultSize, wxDefaultSize );
 	
-	wxFlexGridSizer* fgSizer1;
-	fgSizer1 = new wxFlexGridSizer( 2, 2, 10, 10 );
-	fgSizer1->SetFlexibleDirection( wxBOTH );
-	fgSizer1->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
+	wxBoxSizer* bSizer1;
+	bSizer1 = new wxBoxSizer( wxVERTICAL );
 	
+	wxBoxSizer* bSizer2;
+	bSizer2 = new wxBoxSizer( wxHORIZONTAL );
+	
+	bSizer2->SetMinSize( wxSize( -1,20 ) ); 
 	m_staticText4 = new wxStaticText( this, wxID_ANY, wxT("Log location"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText4->Wrap( -1 );
-	fgSizer1->Add( m_staticText4, 0, wxALL, 5 );
+	bSizer2->Add( m_staticText4, 0, wxALL, 10 );
 	
-	m_textCtrl4 = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxSize( 250,-1 ), 0 );
-	fgSizer1->Add( m_textCtrl4, 0, wxALL, 5 );
+	m_log_location_picker = new wxFilePickerCtrl( this, wxID_ANY, wxEmptyString, wxEmptyString, wxT("*.*"), wxDefaultPosition, wxDefaultSize, wxFLP_SAVE|wxFLP_USE_TEXTCTRL );
+	bSizer2->Add( m_log_location_picker, 1, wxALL, 5 );
 	
-	m_button3 = new wxButton( this, wxID_ANY, wxT("MyButton"), wxDefaultPosition, wxDefaultSize, 0 );
-	fgSizer1->Add( m_button3, 0, wxALL, 5 );
+	bSizer1->Add( bSizer2, 1, wxALIGN_TOP|wxALL|wxEXPAND, 5 );
 	
-	m_button4 = new wxButton( this, wxID_ANY, wxT("MyButton"), wxDefaultPosition, wxDefaultSize, 0 );
-	fgSizer1->Add( m_button4, 0, wxALL, 5 );
+	wxBoxSizer* bSizer3;
+	bSizer3 = new wxBoxSizer( wxHORIZONTAL );
 	
-	this->SetSizer( fgSizer1 );
+	m_ok_button = new wxButton( this, wxID_ANY, wxT("OK"), wxDefaultPosition, wxDefaultSize, 0 );
+	bSizer3->Add( m_ok_button, 0, wxALL|wxALIGN_BOTTOM, 5 );
+	
+	m_cancel_button = new wxButton( this, wxID_ANY, wxT("Cancel"), wxDefaultPosition, wxDefaultSize, 0 );
+	bSizer3->Add( m_cancel_button, 0, wxALL|wxALIGN_BOTTOM, 5 );
+	
+	bSizer1->Add( bSizer3, 1, wxALL|wxEXPAND, 5 );
+	
+	this->SetSizer( bSizer1 );
 	this->Layout();
+	
+	// Connect Events
+	m_ok_button->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( ConfigDialog::OnOkButtonClicked ), NULL, this );
 }
 
 ConfigDialog::~ConfigDialog()
 {
+	// Disconnect Events
+	m_ok_button->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( ConfigDialog::OnOkButtonClicked ), NULL, this );
 }

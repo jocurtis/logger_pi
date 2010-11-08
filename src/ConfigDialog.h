@@ -14,9 +14,9 @@
 #include <wx/font.h>
 #include <wx/colour.h>
 #include <wx/settings.h>
-#include <wx/textctrl.h>
-#include <wx/button.h>
+#include <wx/filepicker.h>
 #include <wx/sizer.h>
+#include <wx/button.h>
 #include <wx/dialog.h>
 
 ///////////////////////////////////////////////////////////////////////////
@@ -31,13 +31,17 @@ class ConfigDialog : public wxDialog
 	
 	protected:
 		wxStaticText* m_staticText4;
-		wxTextCtrl* m_textCtrl4;
-		wxButton* m_button3;
-		wxButton* m_button4;
+		wxFilePickerCtrl* m_log_location_picker;
+		wxButton* m_ok_button;
+		wxButton* m_cancel_button;
+		
+		// Virtual event handlers, overide them in your derived class
+		virtual void OnOkButtonClicked( wxCommandEvent& event ) { event.Skip(); }
+		
 	
 	public:
 		
-		ConfigDialog( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = wxEmptyString, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 407,195 ), long style = wxDEFAULT_DIALOG_STYLE );
+		ConfigDialog( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = wxT("Logger config"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 500,150 ), long style = wxDEFAULT_DIALOG_STYLE );
 		~ConfigDialog();
 	
 };

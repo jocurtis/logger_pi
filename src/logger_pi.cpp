@@ -70,17 +70,19 @@ int logger_pi::Init(void)
 {
       printf("logger_pi Init()\n");
 
-//      m_plogger_window = NULL;
       m_config_dialog = NULL;
 
       // Get a pointer to the opencpn display canvas, to use as a parent for windows created
       m_parent_window = GetOCPNCanvasWindow();
+      m_pconfig = GetOCPNConfigObject();
+
+      LoadConfig();
 
       // Create the Context Menu Items
 
       //    In order to avoid an ASSERT on msw debug builds,
       //    we need to create a dummy menu to act as a surrogate parent of the created MenuItems
-      //    The Items will be re-parented when added to the real context meenu
+      //    The Items will be re-parented when added to the real context menu
       wxMenu dummy_menu;
 
       wxMenuItem *pmi = new wxMenuItem(&dummy_menu, -1, _("Show logger plugin config"));
@@ -91,35 +93,16 @@ int logger_pi::Init(void)
       m_hide_id = AddCanvasContextMenuItem(pmih, this );
       SetCanvasContextMenuItemViz(m_hide_id, false);
 
-/*
-        m_plogger_window = new LoggerWindow(m_parent_window, wxID_ANY);
-
-        m_AUImgr = GetFrameAuiManager();
-        m_AUImgr->AddPane(m_plogger_window);
-        m_AUImgr->GetPane(m_plogger_window).Name(_T("Logger plugin config"));
-
-        m_AUImgr->GetPane(m_plogger_window).Float();
-        m_AUImgr->GetPane(m_plogger_window).FloatingPosition(300,30);
-
-        m_AUImgr->GetPane(m_plogger_window).Caption(_T("AUI Managed Demo Window"));
-        m_AUImgr->GetPane(m_plogger_window).CaptionVisible(true);
-        m_AUImgr->GetPane(m_plogger_window).GripperTop(true);
-        m_AUImgr->GetPane(m_plogger_window).CloseButton(true);
-        m_AUImgr->GetPane(m_plogger_window).Show(false);
-        m_AUImgr->Update();
-*/
-
       return (
            INSTALLS_CONTEXTMENU_ITEMS     |
            WANTS_NMEA_SENTENCES           |
-           USES_AUI_MANAGER
+           WANTS_CONFIG
             );
 }
 
 bool logger_pi::DeInit(void)
 {
 //      printf("logger_pi DeInit()\n");
-//      m_AUImgr->DetachPane(m_plogger_window);
 
       if(m_config_dialog)
       {
@@ -190,12 +173,6 @@ void logger_pi::SetNMEASentence(wxString &sentence)
 	wxFile nmeaLogOut(nmeaLogfileName, wxFile::write_append);
 	nmeaLogOut.Write(sentence);
 	nmeaLogOut.Close();
-
-
-/*      if(m_plogger_window)
-      {
-            m_plogger_window->SetSentence(sentence);
-      }*/
 }
 
 
@@ -213,138 +190,57 @@ void logger_pi::OnContextMenuItemCallback(int id)
 
 }
 
-void logger_pi::UpdateAuiStatus(void)
+bool logger_pi::LoadConfig(void)
 {
-      //    This method is called after the PlugIn is initialized
-      //    and the frame has done its initial layout, possibly from a saved wxAuiManager "Perspective"
-      //    It is a chance for the PlugIn to syncronize itself internally with the state of any Panes that
-      //    were added to the frame in the PlugIn ctor.
+      wxFileConfig *pConf = (wxFileConfig *)m_pconfig;
 
-      //    We use this callback here to keep the context menu selection in sync with the window state
+      if(pConf)
+      {
+/*            pConf->SetPath ( _T( "/Settings" ) );
+            pConf->Read ( _T( "GRIBUseHiDef" ),  &m_bGRIBUseHiDef, 0 );
+            pConf->Read ( _T( "ShowGRIBIcon" ),  &m_bGRIBShowIcon, 1 );
 
 
-/*  
-      wxAuiPaneInfo &pane = m_AUImgr->GetPane(m_plogger_window);
-      if(!pane.IsOk())
-            return;
+            m_grib_dialog_sx = pConf->Read ( _T ( "GRIBDialogSizeX" ), 300L );
+            m_grib_dialog_sy = pConf->Read ( _T ( "GRIBDialogSizeY" ), 540L );
+            m_grib_dialog_x =  pConf->Read ( _T ( "GRIBDialogPosX" ), 20L );
+            m_grib_dialog_y =  pConf->Read ( _T ( "GRIBDialogPosY" ), 20L );
 
-      printf("update %d\n",pane.IsShown());
+            if((m_grib_dialog_x < 0) || (m_grib_dialog_x > m_display_width))
+                  m_grib_dialog_x = 5;
+            if((m_grib_dialog_y < 0) || (m_grib_dialog_y > m_display_height))
+                  m_grib_dialog_y = 5;
 
-      SetCanvasContextMenuItemViz(m_hide_id, pane.IsShown());
-      SetCanvasContextMenuItemViz(m_show_id, !pane.IsShown());
+            pConf->SetPath ( _T ( "/Directories" ) );
+            pConf->Read ( _T ( "GRIBDirectory" ), &m_grib_dir );
 */
-}
-
-
-//----------------------------------------------------------------
-//
-//    Demo Window Implementation
-//
-//----------------------------------------------------------------
-
-BEGIN_EVENT_TABLE(LoggerWindow, wxWindow)
-  EVT_PAINT ( LoggerWindow::OnPaint )
-  EVT_SIZE(LoggerWindow::OnSize)
-
-
-END_EVENT_TABLE()
-
-LoggerWindow::LoggerWindow(wxWindow *pparent, wxWindowID id)
-      :wxWindow(pparent, id, wxPoint(10,10), wxSize(200,200),
-             wxSIMPLE_BORDER, _T("OpenCPN PlugIn"))
-{
-      mLat = 0.0;
-      mLon = 1.0;
-      mSog = 2.0;
-      mCog = 3.0;
-      mVar = 4.0;
-}
-
-LoggerWindow::~LoggerWindow()
-{
-}
-
-void LoggerWindow::OnSize(wxSizeEvent& event)
-{
-      printf("LoggerWindow OnSize()\n");
-}
-
-
-void LoggerWindow::SetSentence(wxString &sentence)
-{
-      m_NMEA0183 << sentence;
-
-      bool bGoodData = false;
-
-      if(m_NMEA0183.PreParse())
-      {
-            if(m_NMEA0183.LastSentenceIDReceived == _T("RMC"))
-            {
-                  if(m_NMEA0183.Parse())
-                  {
-                              if(m_NMEA0183.Rmc.IsDataValid == NTrue)
-                              {
-                                    float llt = m_NMEA0183.Rmc.Position.Latitude.Latitude;
-                                    int lat_deg_int = (int)(llt / 100);
-                                    float lat_deg = lat_deg_int;
-                                    float lat_min = llt - (lat_deg * 100);
-                                    mLat = lat_deg + (lat_min/60.);
-                                    if(m_NMEA0183.Rmc.Position.Latitude.Northing == South)
-                                          mLat = -mLat;
-
-                                    float lln = m_NMEA0183.Rmc.Position.Longitude.Longitude;
-                                    int lon_deg_int = (int)(lln / 100);
-                                    float lon_deg = lon_deg_int;
-                                    float lon_min = lln - (lon_deg * 100);
-                                    mLon = lon_deg + (lon_min/60.);
-                                    if(m_NMEA0183.Rmc.Position.Longitude.Easting == West)
-                                          mLon = -mLon;
-
-                                    mSog = m_NMEA0183.Rmc.SpeedOverGroundKnots;
-                                    mCog = m_NMEA0183.Rmc.TrackMadeGoodDegreesTrue;
-
-                                    if(m_NMEA0183.Rmc.MagneticVariationDirection == East)
-                                          mVar =  m_NMEA0183.Rmc.MagneticVariation;
-                                    else if(m_NMEA0183.Rmc.MagneticVariationDirection == West)
-                                          mVar = -m_NMEA0183.Rmc.MagneticVariation;
-
-                                    bGoodData = true;
-
-                              }
-                        }
-                  }
-        }
-
-      //    Got the data, now do something with it
-
-      if(bGoodData)
-      {
-            Refresh(false);
+            return true;
       }
+      else
+            return false;
 }
 
-void LoggerWindow::OnPaint(wxPaintEvent& event)
+bool logger_pi::SaveConfig(void)
 {
-      wxLogMessage(_T("logger_pi onpaint"));
+      wxFileConfig *pConf = (wxFileConfig *)m_pconfig;
 
-      wxPaintDC dc ( this );
-
-//      printf("onpaint\n");
-
+      if(pConf)
       {
-            dc.Clear();
+/*            pConf->SetPath ( _T ( "/Settings" ) );
+            pConf->Write ( _T ( "GRIBUseHiDef" ), m_bGRIBUseHiDef );
+            pConf->Write ( _T ( "ShowGRIBIcon" ), m_bGRIBShowIcon );
 
-            wxString data;
-            data.Printf(_T("Lat: %g "), mLat);
-            dc.DrawText(data, 10, 10);
+            pConf->Write ( _T ( "GRIBDialogSizeX" ),  m_grib_dialog_sx );
+            pConf->Write ( _T ( "GRIBDialogSizeY" ),  m_grib_dialog_sy );
+            pConf->Write ( _T ( "GRIBDialogPosX" ),   m_grib_dialog_x );
+            pConf->Write ( _T ( "GRIBDialogPosY" ),   m_grib_dialog_y );
 
-            data.Printf(_T("Lon: %g"), mLon);
-            dc.DrawText(data, 10, 40);
-
-            data.Printf(_T("Sog: %g"), mSog);
-            dc.DrawText(data, 10, 70);
-
-            data.Printf(_T("Cog: %g"), mCog);
-            dc.DrawText(data, 10, 100);
+            pConf->SetPath ( _T ( "/Directories" ) );
+            pConf->Write ( _T ( "GRIBDirectory" ), m_grib_dir );
+*/
+            return true;
       }
+      else
+            return false;
 }
+
