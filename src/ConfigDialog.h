@@ -30,12 +30,10 @@ class ConfigDialog : public wxDialog
 	private:
 	
 	protected:
-		wxStaticText* m_staticText2;
-		wxTextCtrl* m_textCtrl2;
-		wxStaticText* m_staticText3;
-		wxTextCtrl* m_textCtrl3;
-		wxButton* m_button1;
-		wxButton* m_button2;
+		wxStaticText* m_staticText4;
+		wxTextCtrl* m_textCtrl4;
+		wxButton* m_button3;
+		wxButton* m_button4;
 	
 	public:
 		

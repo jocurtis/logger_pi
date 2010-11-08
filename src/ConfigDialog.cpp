@@ -13,30 +13,25 @@ ConfigDialog::ConfigDialog( wxWindow* parent, wxWindowID id, const wxString& tit
 {
 	this->SetSizeHints( wxDefaultSize, wxDefaultSize );
 	
-	wxGridSizer* gSizer1;
-	gSizer1 = new wxGridSizer( 2, 2, 0, 0 );
+	wxFlexGridSizer* fgSizer1;
+	fgSizer1 = new wxFlexGridSizer( 2, 2, 10, 10 );
+	fgSizer1->SetFlexibleDirection( wxBOTH );
+	fgSizer1->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
 	
-	m_staticText2 = new wxStaticText( this, wxID_ANY, wxT("MyLabel"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_staticText2->Wrap( -1 );
-	gSizer1->Add( m_staticText2, 0, wxALL, 5 );
+	m_staticText4 = new wxStaticText( this, wxID_ANY, wxT("Log location"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText4->Wrap( -1 );
+	fgSizer1->Add( m_staticText4, 0, wxALL, 5 );
 	
-	m_textCtrl2 = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	gSizer1->Add( m_textCtrl2, 0, wxALL, 5 );
+	m_textCtrl4 = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxSize( 250,-1 ), 0 );
+	fgSizer1->Add( m_textCtrl4, 0, wxALL, 5 );
 	
-	m_staticText3 = new wxStaticText( this, wxID_ANY, wxT("MyLabel"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_staticText3->Wrap( -1 );
-	gSizer1->Add( m_staticText3, 0, wxALL, 5 );
+	m_button3 = new wxButton( this, wxID_ANY, wxT("MyButton"), wxDefaultPosition, wxDefaultSize, 0 );
+	fgSizer1->Add( m_button3, 0, wxALL, 5 );
 	
-	m_textCtrl3 = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	gSizer1->Add( m_textCtrl3, 0, wxALL, 5 );
+	m_button4 = new wxButton( this, wxID_ANY, wxT("MyButton"), wxDefaultPosition, wxDefaultSize, 0 );
+	fgSizer1->Add( m_button4, 0, wxALL, 5 );
 	
-	m_button1 = new wxButton( this, wxID_ANY, wxT("MyButton"), wxDefaultPosition, wxDefaultSize, 0 );
-	gSizer1->Add( m_button1, 0, wxALL, 5 );
-	
-	m_button2 = new wxButton( this, wxID_ANY, wxT("MyButton"), wxDefaultPosition, wxDefaultSize, 0 );
-	gSizer1->Add( m_button2, 0, wxALL, 5 );
-	
-	this->SetSizer( gSizer1 );
+	this->SetSizer( fgSizer1 );
 	this->Layout();
 }
 
