@@ -48,7 +48,7 @@
             <event name="OnActivate"></event>
             <event name="OnActivateApp"></event>
             <event name="OnChar"></event>
-            <event name="OnClose"></event>
+            <event name="OnClose">OnClose</event>
             <event name="OnEnterWindow"></event>
             <event name="OnEraseBackground"></event>
             <event name="OnHibernate"></event>
@@ -224,7 +224,7 @@
                                 <property name="fg"></property>
                                 <property name="font"></property>
                                 <property name="hidden">0</property>
-                                <property name="id">wxID_ANY</property>
+                                <property name="id">wxID_OK</property>
                                 <property name="label">OK</property>
                                 <property name="maximum_size"></property>
                                 <property name="minimum_size"></property>
@@ -242,7 +242,7 @@
                                 <property name="window_extra_style"></property>
                                 <property name="window_name"></property>
                                 <property name="window_style"></property>
-                                <event name="OnButtonClick">OnOkButtonClicked</event>
+                                <event name="OnButtonClick">OnOKButtonClicked</event>
                                 <event name="OnChar"></event>
                                 <event name="OnEnterWindow"></event>
                                 <event name="OnEraseBackground"></event>
@@ -280,7 +280,7 @@
                                 <property name="fg"></property>
                                 <property name="font"></property>
                                 <property name="hidden">0</property>
-                                <property name="id">wxID_ANY</property>
+                                <property name="id">wxID_CANCEL</property>
                                 <property name="label">Cancel</property>
                                 <property name="maximum_size"></property>
                                 <property name="minimum_size"></property>
@@ -298,7 +298,7 @@
                                 <property name="window_extra_style"></property>
                                 <property name="window_name"></property>
                                 <property name="window_style"></property>
-                                <event name="OnButtonClick"></event>
+                                <event name="OnButtonClick">OnCancelButtonClicked</event>
                                 <event name="OnChar"></event>
                                 <event name="OnEnterWindow"></event>
                                 <event name="OnEraseBackground"></event>

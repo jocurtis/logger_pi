@@ -184,7 +184,7 @@ void logger_pi::OnContextMenuItemCallback(int id)
 
 
       if(NULL == m_config_dialog)
-            m_config_dialog = new ConfigDialog(m_parent_window);
+            m_config_dialog = new ConfigDialogImpl(m_parent_window);
 
       m_config_dialog->Show();
 

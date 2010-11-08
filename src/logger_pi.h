@@ -44,7 +44,7 @@
 
 #include "nmea0183/nmea0183.h"
 
-#include "ConfigDialog.h"
+#include "ConfigDialogImpl.h"
 
 class LoggerWindow;
 
@@ -82,8 +82,7 @@ private:
 
       wxWindow         *m_parent_window;
       wxFileConfig     *m_pconfig;
-      ConfigDialog     *m_config_dialog;
-      wxAuiManager     *m_AUImgr;
+      ConfigDialogImpl *m_config_dialog;
       int               m_show_id;
       int               m_hide_id;
 };

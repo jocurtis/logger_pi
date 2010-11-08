@@ -36,7 +36,9 @@ class ConfigDialog : public wxDialog
 		wxButton* m_cancel_button;
 		
 		// Virtual event handlers, overide them in your derived class
-		virtual void OnOkButtonClicked( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnClose( wxCloseEvent& event ) { event.Skip(); }
+		virtual void OnOKButtonClicked( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnCancelButtonClicked( wxCommandEvent& event ) { event.Skip(); }
 		
 	
 	public:

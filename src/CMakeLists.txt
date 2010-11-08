@@ -73,6 +73,8 @@ SET(SRC_DEMO
  		logger_pi.cpp
 		ConfigDialog.h
 		ConfigDialog.cpp
+		ConfigDialogImpl.h
+		ConfigDialogImpl.cpp
  	)
 
 SET(SRC_NMEA0183
