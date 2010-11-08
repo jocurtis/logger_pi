@@ -11,14 +11,7 @@ ConfigDialogImpl::ConfigDialogImpl(wxWindow*& parent)
 }
 
 void ConfigDialogImpl::SaveConfig() {
-//    printf("Saving config...%s\n", m_log_location_picker->GetPath().wchar_str());
-    wxPuts(wxT("LOL"));
-    wxPuts(m_log_location_picker->GetPath());
-    wxPrintf(wxT("wut"));
-    fflush(stdout);
-    fflush(stderr);
-
-// WHY THE FUCK IS THIS NOT WORKING?  I HATE C++!!!
+    wxLogMessage(wxT("Log location: ") + m_log_location_picker->GetPath());
 }
 
 void ConfigDialogImpl::OnClose( wxCloseEvent& event ) {
