@@ -8,11 +8,11 @@
         <property name="encoding">UTF-8</property>
         <property name="event_generation">connect</property>
         <property name="event_handler">impl_virtual</property>
-        <property name="file"></property>
+        <property name="file">ConfigDialog</property>
         <property name="first_id">1000</property>
         <property name="help_provider">none</property>
         <property name="internationalize">0</property>
-        <property name="name">MyProject4</property>
+        <property name="name">logger_pi_config_dialog</property>
         <property name="namespace"></property>
         <property name="path">.</property>
         <property name="precompiled_header"></property>
