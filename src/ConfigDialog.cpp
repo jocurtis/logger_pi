@@ -19,15 +19,38 @@ ConfigDialog::ConfigDialog( wxWindow* parent, wxWindowID id, const wxString& tit
 	wxBoxSizer* bSizer2;
 	bSizer2 = new wxBoxSizer( wxHORIZONTAL );
 	
-	bSizer2->SetMinSize( wxSize( -1,20 ) ); 
-	m_staticText4 = new wxStaticText( this, wxID_ANY, wxT("Log location"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText4 = new wxStaticText( this, wxID_ANY, wxT("GPS log location"), wxDefaultPosition, wxSize( 120,-1 ), 0 );
 	m_staticText4->Wrap( -1 );
 	bSizer2->Add( m_staticText4, 0, wxALL, 10 );
 	
-	m_log_location_picker = new wxFilePickerCtrl( this, wxID_ANY, wxEmptyString, wxEmptyString, wxT("*.*"), wxDefaultPosition, wxDefaultSize, wxFLP_SAVE|wxFLP_USE_TEXTCTRL );
-	bSizer2->Add( m_log_location_picker, 1, wxALL, 5 );
+	m_gps_log_location_picker = new wxFilePickerCtrl( this, wxID_ANY, wxEmptyString, wxEmptyString, wxT("*.*"), wxDefaultPosition, wxDefaultSize, wxFLP_SAVE|wxFLP_USE_TEXTCTRL );
+	bSizer2->Add( m_gps_log_location_picker, 1, wxALL, 5 );
 	
 	bSizer1->Add( bSizer2, 1, wxALIGN_TOP|wxALL|wxEXPAND, 5 );
+	
+	wxBoxSizer* bSizer7;
+	bSizer7 = new wxBoxSizer( wxHORIZONTAL );
+	
+	m_staticText2 = new wxStaticText( this, wxID_ANY, wxT("AIS log location"), wxDefaultPosition, wxSize( 120,-1 ), 0 );
+	m_staticText2->Wrap( -1 );
+	bSizer7->Add( m_staticText2, 0, wxALL, 10 );
+	
+	m_ais_log_location_picker = new wxFilePickerCtrl( this, wxID_ANY, wxEmptyString, wxT("Select a file"), wxT("*.*"), wxDefaultPosition, wxDefaultSize, wxFLP_SAVE|wxFLP_USE_TEXTCTRL );
+	bSizer7->Add( m_ais_log_location_picker, 1, wxALL, 5 );
+	
+	bSizer1->Add( bSizer7, 1, wxALL|wxEXPAND, 5 );
+	
+	wxBoxSizer* bSizer8;
+	bSizer8 = new wxBoxSizer( wxHORIZONTAL );
+	
+	m_staticText3 = new wxStaticText( this, wxID_ANY, wxT("NMEA log location"), wxDefaultPosition, wxSize( 120,-1 ), 0 );
+	m_staticText3->Wrap( -1 );
+	bSizer8->Add( m_staticText3, 0, wxALL, 10 );
+	
+	m_nmea_log_location_picker = new wxFilePickerCtrl( this, wxID_ANY, wxEmptyString, wxT("Select a file"), wxT("*.*"), wxDefaultPosition, wxDefaultSize, wxFLP_SAVE|wxFLP_USE_TEXTCTRL );
+	bSizer8->Add( m_nmea_log_location_picker, 1, wxALL, 5 );
+	
+	bSizer1->Add( bSizer8, 1, wxALL|wxEXPAND, 5 );
 	
 	wxBoxSizer* bSizer3;
 	bSizer3 = new wxBoxSizer( wxHORIZONTAL );

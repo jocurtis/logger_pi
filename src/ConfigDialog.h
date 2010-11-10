@@ -31,7 +31,11 @@ class ConfigDialog : public wxDialog
 	
 	protected:
 		wxStaticText* m_staticText4;
-		wxFilePickerCtrl* m_log_location_picker;
+		wxFilePickerCtrl* m_gps_log_location_picker;
+		wxStaticText* m_staticText2;
+		wxFilePickerCtrl* m_ais_log_location_picker;
+		wxStaticText* m_staticText3;
+		wxFilePickerCtrl* m_nmea_log_location_picker;
 		wxButton* m_ok_button;
 		wxButton* m_cancel_button;
 		
@@ -43,7 +47,7 @@ class ConfigDialog : public wxDialog
 	
 	public:
 		
-		ConfigDialog( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = wxT("Logger config"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 500,150 ), long style = wxDEFAULT_DIALOG_STYLE );
+		ConfigDialog( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = wxT("Logger config"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 500,300 ), long style = wxDEFAULT_DIALOG_STYLE );
 		~ConfigDialog();
 	
 };
