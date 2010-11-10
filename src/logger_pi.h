@@ -40,13 +40,16 @@
 #define     MY_API_VERSION_MAJOR    1
 #define     MY_API_VERSION_MINOR    1
 
+#include <wx/fileconf.h>
 #include "ocpn_plugin.h"
 
 #include "nmea0183/nmea0183.h"
 
-#include "ConfigDialogImpl.h"
+#define NMEA_LOGFILE_FULL_PATH_DEFAULT "%Y-%m-%d.nmea"
+#define GPS_LOGFILE_FULL_PATH_DEFAULT "gps.%Y-%m-%d.nmea"
+#define AIS_LOGFILE_FULL_PATH_DEFAULT "ais.%Y-%m-%d.nmea"
 
-class LoggerWindow;
+class ConfigDialogImpl;
 
 //----------------------------------------------------------------------------------------------------------
 //    The PlugIn Class Definition
@@ -71,18 +74,24 @@ public:
       wxString GetShortDescription();
       wxString GetLongDescription();
 
+      bool LoadConfig(void);
+      bool SaveConfig(void);
+
 //    The optional method overrides
 
       void SetNMEASentence(wxString &sentence);
       void OnContextMenuItemCallback(int id);
 
+      wxString nmeaLogfileFullPath;
+      wxString gpsLogfileFullPath;
+      wxString aisLogfileFullPath;
+
 private:
-      bool LoadConfig(void);
-      bool SaveConfig(void);
 
       wxWindow         *m_parent_window;
       wxFileConfig     *m_pconfig;
       ConfigDialogImpl *m_config_dialog;
+
       int               m_show_id;
       int               m_hide_id;
 };

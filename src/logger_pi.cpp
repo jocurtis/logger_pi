@@ -35,8 +35,12 @@
 #include <wx/aui/aui.h>
 #include <wx/datetime.h>
 #include <wx/file.h>
+#include <wx/filefn.h>
+#include <wx/dir.h>
 
 #include "logger_pi.h"
+#include "ConfigDialogImpl.h"
+
 #include <wx/filename.h>
 
 #ifndef DECL_EXP
@@ -153,31 +157,17 @@ Logs all incoming NMEA sentences to a log file.");
 
 void logger_pi::SetNMEASentence(wxString &sentence)
 {
-//      printf("logger_pi::SetNMEASentence\n");
-
-	// log the sentence
-
   wxDateTime now = wxDateTime::Now();
-  wxString dateFormatted = now.FormatISODate();
   
-  // determine ais or gps
-  //	wxString source = wxT("");
-  //	m_launcher->GetSource(source);
-  //	if (source.Contains(_T("AIS"))) {
-  //		nmeaLogfileName = wxT("ais.") + dateFormatted + wxT(".nmea");
-  //	} else {
-  wxString nmeaLogDir = now.Format(wxT("%Y/%B"), wxDateTime::CET);
-  wxString nmeaLogfileName = now.Format(wxT("%Y/%B/gps.%Y-%m-%d.nmea"), wxDateTime::CET);
+  // format the gps path
+  wxString gpsLogfileFullPathFormatted = now.Format(gpsLogfileFullPath, wxDateTime::CET);
+
+  // get the base dir and create if necessary
+  wxString baseDir = ::wxPathOnly(gpsLogfileFullPathFormatted);
+  wxFileName::Mkdir(baseDir, 0755, wxPATH_MKDIR_FULL);
   
-  // todo: actually get basedir
-  
-  wxLogMessage(nmeaLogfileName);
-  wxFileName::Mkdir(nmeaLogDir, wxS_DIR_DEFAULT, wxPATH_MKDIR_FULL);
-  
-  // nmeaLogfileName = wxT("gps.") + dateFormatted + wxT(".nmea");
-//	}
-  
-  wxFile nmeaLogOut(nmeaLogfileName, wxFile::write_append);
+  // log it
+  wxFile nmeaLogOut(gpsLogfileFullPathFormatted, wxFile::write_append);
   nmeaLogOut.Write(sentence);
   nmeaLogOut.Close();
 }
@@ -185,14 +175,17 @@ void logger_pi::SetNMEASentence(wxString &sentence)
 
 void logger_pi::OnContextMenuItemCallback(int id)
 {
-    wxLogMessage(_T("logger_pi OnContextMenuCallBack()"));
+    //wxLogMessage(_T("logger_pi OnContextMenuCallBack()"));
 
          ::wxBell();
 
+      LoadConfig();
 
-      if(NULL == m_config_dialog)
-            m_config_dialog = new ConfigDialogImpl(m_parent_window);
+      if(m_config_dialog == NULL) {
+            m_config_dialog = new ConfigDialogImpl(m_parent_window, this);
+      }
 
+      m_config_dialog->UpdateFromLogger();
       m_config_dialog->Show();
 
 }
@@ -203,7 +196,18 @@ bool logger_pi::LoadConfig(void)
 
       if(pConf)
       {
-/*            pConf->SetPath ( _T( "/Settings" ) );
+	    wxLogMessage(wxT("Loading settings"));
+            pConf->SetPath ( _T( "/Settings" ) );
+	    pConf->Read ( _T( "LOGGERnmeaLogfileFullPath" ),  &nmeaLogfileFullPath, _T(NMEA_LOGFILE_FULL_PATH_DEFAULT) );
+	    wxLogMessage(_T ("LOGGERnmeaLogfileFullPath: ") + nmeaLogfileFullPath);
+
+	    pConf->Read ( _T( "LOGGERgpsLogfileFullPath" ),  &gpsLogfileFullPath, _T(GPS_LOGFILE_FULL_PATH_DEFAULT) );
+	    wxLogMessage(_T ("LOGGERgpsLogfileFullPath: ") + gpsLogfileFullPath);
+
+	    pConf->Read ( _T( "LOGGERaisLogfileFullPath" ),  &aisLogfileFullPath, _T(GPS_LOGFILE_FULL_PATH_DEFAULT) );
+	    wxLogMessage(_T ("LOGGERaisLogfileFullPath: ") + aisLogfileFullPath);
+
+/*
             pConf->Read ( _T( "GRIBUseHiDef" ),  &m_bGRIBUseHiDef, 0 );
             pConf->Read ( _T( "ShowGRIBIcon" ),  &m_bGRIBShowIcon, 1 );
 
@@ -233,7 +237,17 @@ bool logger_pi::SaveConfig(void)
 
       if(pConf)
       {
-/*            pConf->SetPath ( _T ( "/Settings" ) );
+	    wxLogMessage(wxT("Saving settings"));
+            pConf->SetPath ( _T ( "/Settings" ) );
+            pConf->Write ( _T ( "LOGGERnmeaLogfileFullPath" ), nmeaLogfileFullPath );
+	    wxLogMessage(_T ("LOGGERnmeaLogfileFullPath: ") + nmeaLogfileFullPath);
+
+            pConf->Write ( _T ( "LOGGERgpsLogfileFullPath" ), gpsLogfileFullPath );
+	    wxLogMessage(_T ("LOGGERgpsLogfileFullPath: ") + gpsLogfileFullPath);
+
+            pConf->Write ( _T ( "LOGGERaisLogfileFullPath" ), aisLogfileFullPath );
+	    wxLogMessage(_T ("LOGGERaisLogfileFullPath: ") + aisLogfileFullPath);
+/*
             pConf->Write ( _T ( "GRIBUseHiDef" ), m_bGRIBUseHiDef );
             pConf->Write ( _T ( "ShowGRIBIcon" ), m_bGRIBShowIcon );
 
