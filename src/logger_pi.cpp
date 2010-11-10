@@ -159,6 +159,12 @@ void logger_pi::SetNMEASentence(wxString &sentence)
 {
   wxDateTime now = wxDateTime::Now();
   
+
+	// TODO: * Differentiate between AIS AND GPS
+	//       * Modify UI for, ais, gps, or combined output (checkboxes or something)
+	//	 * Clean up code and submit?
+
+
   // format the gps path
   wxString gpsLogfileFullPathFormatted = now.Format(gpsLogfileFullPath, wxDateTime::CET);
 
