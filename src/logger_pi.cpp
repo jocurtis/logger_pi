@@ -37,6 +37,7 @@
 #include <wx/file.h>
 
 #include "logger_pi.h"
+#include <wx/filename.h>
 
 #ifndef DECL_EXP
 #ifdef __WXMSW__
@@ -156,23 +157,29 @@ void logger_pi::SetNMEASentence(wxString &sentence)
 
 	// log the sentence
 
-	wxDateTime now = wxDateTime::Now();
-//	now.Format(wxT("%c"), wxDateTime::CET)
-	wxString dateFormatted = now.FormatISODate();
-	wxString nmeaLogfileName;
-
-	// determine ais or gps
-//	wxString source = wxT("");
-//	m_launcher->GetSource(source);
-//	if (source.Contains(_T("AIS"))) {
-//		nmeaLogfileName = wxT("ais.") + dateFormatted + wxT(".nmea");
-//	} else {
-		nmeaLogfileName = wxT("gps.") + dateFormatted + wxT(".nmea");
+  wxDateTime now = wxDateTime::Now();
+  wxString dateFormatted = now.FormatISODate();
+  
+  // determine ais or gps
+  //	wxString source = wxT("");
+  //	m_launcher->GetSource(source);
+  //	if (source.Contains(_T("AIS"))) {
+  //		nmeaLogfileName = wxT("ais.") + dateFormatted + wxT(".nmea");
+  //	} else {
+  wxString nmeaLogDir = now.Format(wxT("%Y/%B"), wxDateTime::CET);
+  wxString nmeaLogfileName = now.Format(wxT("%Y/%B/gps.%Y-%m-%d.nmea"), wxDateTime::CET);
+  
+  // todo: actually get basedir
+  
+  wxLogMessage(nmeaLogfileName);
+  wxFileName::Mkdir(nmeaLogDir, wxS_DIR_DEFAULT, wxPATH_MKDIR_FULL);
+  
+  // nmeaLogfileName = wxT("gps.") + dateFormatted + wxT(".nmea");
 //	}
-
-	wxFile nmeaLogOut(nmeaLogfileName, wxFile::write_append);
-	nmeaLogOut.Write(sentence);
-	nmeaLogOut.Close();
+  
+  wxFile nmeaLogOut(nmeaLogfileName, wxFile::write_append);
+  nmeaLogOut.Write(sentence);
+  nmeaLogOut.Close();
 }
 
 
