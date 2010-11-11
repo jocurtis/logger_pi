@@ -161,21 +161,22 @@ void logger_pi::SetNMEASentence(wxString &sentence)
   
 
 	// TODO: * Differentiate between AIS AND GPS
-	//       * Modify UI for, ais, gps, or combined output (checkboxes or something)
 	//	 * Clean up code and submit?
 
 
-  // format the gps path
-  wxString gpsLogfileFullPathFormatted = now.Format(gpsLogfileFullPath, wxDateTime::CET);
+  if (gpsLogEnabled) {
+	  // format the gps path
+	  wxString gpsLogfileFullPathFormatted = now.Format(gpsLogfileFullPath, wxDateTime::CET);
 
-  // get the base dir and create if necessary
-  wxString baseDir = ::wxPathOnly(gpsLogfileFullPathFormatted);
-  wxFileName::Mkdir(baseDir, 0755, wxPATH_MKDIR_FULL);
-  
-  // log it
-  wxFile nmeaLogOut(gpsLogfileFullPathFormatted, wxFile::write_append);
-  nmeaLogOut.Write(sentence);
-  nmeaLogOut.Close();
+	  // get the base dir and create if necessary
+	  wxString baseDir = ::wxPathOnly(gpsLogfileFullPathFormatted);
+	  wxFileName::Mkdir(baseDir, 0755, wxPATH_MKDIR_FULL);
+	  
+	  // log it
+	  wxFile nmeaLogOut(gpsLogfileFullPathFormatted, wxFile::write_append);
+	  nmeaLogOut.Write(sentence);
+	  nmeaLogOut.Close();
+  }
 }
 
 
@@ -204,33 +205,24 @@ bool logger_pi::LoadConfig(void)
       {
 	    wxLogMessage(wxT("Loading settings"));
             pConf->SetPath ( _T( "/Settings" ) );
-	    pConf->Read ( _T( "LOGGERnmeaLogfileFullPath" ),  &nmeaLogfileFullPath, _T(NMEA_LOGFILE_FULL_PATH_DEFAULT) );
-	    wxLogMessage(_T ("LOGGERnmeaLogfileFullPath: ") + nmeaLogfileFullPath);
+	    pConf->Read ( _T( "LOGGERcombinedLogfileFullPath" ),  &combinedLogfileFullPath, _T(COMBINED_LOGFILE_FULL_PATH_DEFAULT) );
+	    wxLogMessage(_T ("LOGGERcombinedLogfileFullPath: ") + combinedLogfileFullPath);
 
 	    pConf->Read ( _T( "LOGGERgpsLogfileFullPath" ),  &gpsLogfileFullPath, _T(GPS_LOGFILE_FULL_PATH_DEFAULT) );
 	    wxLogMessage(_T ("LOGGERgpsLogfileFullPath: ") + gpsLogfileFullPath);
 
-	    pConf->Read ( _T( "LOGGERaisLogfileFullPath" ),  &aisLogfileFullPath, _T(GPS_LOGFILE_FULL_PATH_DEFAULT) );
+	    pConf->Read ( _T( "LOGGERaisLogfileFullPath" ),  &aisLogfileFullPath, _T(AIS_LOGFILE_FULL_PATH_DEFAULT) );
 	    wxLogMessage(_T ("LOGGERaisLogfileFullPath: ") + aisLogfileFullPath);
 
-/*
-            pConf->Read ( _T( "GRIBUseHiDef" ),  &m_bGRIBUseHiDef, 0 );
-            pConf->Read ( _T( "ShowGRIBIcon" ),  &m_bGRIBShowIcon, 1 );
+	    pConf->Read ( _T( "LOGGERcombinedLogEnabled" ),  &combinedLogEnabled, COMBINED_LOG_ENABLED_DEFAULT );
+	    wxLogMessage(_T ("LOGGERcombinedLogEnabled: ") + combinedLogEnabled);
 
+	    pConf->Read ( _T( "LOGGERgpsLogEnabled" ),  &gpsLogEnabled, GPS_LOG_ENABLED_DEFAULT );
+	    wxLogMessage(_T ("LOGGERgpsLogEnabled: ") + gpsLogEnabled);
 
-            m_grib_dialog_sx = pConf->Read ( _T ( "GRIBDialogSizeX" ), 300L );
-            m_grib_dialog_sy = pConf->Read ( _T ( "GRIBDialogSizeY" ), 540L );
-            m_grib_dialog_x =  pConf->Read ( _T ( "GRIBDialogPosX" ), 20L );
-            m_grib_dialog_y =  pConf->Read ( _T ( "GRIBDialogPosY" ), 20L );
+	    pConf->Read ( _T( "LOGGERaisLogEnabled" ),  &aisLogEnabled, AIS_LOG_ENABLED_DEFAULT );
+	    wxLogMessage(_T ("LOGGERaisLogEnabled: ") + aisLogEnabled);
 
-            if((m_grib_dialog_x < 0) || (m_grib_dialog_x > m_display_width))
-                  m_grib_dialog_x = 5;
-            if((m_grib_dialog_y < 0) || (m_grib_dialog_y > m_display_height))
-                  m_grib_dialog_y = 5;
-
-            pConf->SetPath ( _T ( "/Directories" ) );
-            pConf->Read ( _T ( "GRIBDirectory" ), &m_grib_dir );
-*/
             return true;
       }
       else
@@ -245,26 +237,24 @@ bool logger_pi::SaveConfig(void)
       {
 	    wxLogMessage(wxT("Saving settings"));
             pConf->SetPath ( _T ( "/Settings" ) );
-            pConf->Write ( _T ( "LOGGERnmeaLogfileFullPath" ), nmeaLogfileFullPath );
-	    wxLogMessage(_T ("LOGGERnmeaLogfileFullPath: ") + nmeaLogfileFullPath);
+            pConf->Write ( _T ( "LOGGERcombinedLogfileFullPath" ), combinedLogfileFullPath );
+	    wxLogMessage(_T ("LOGGERcombinedLogfileFullPath: ") + combinedLogfileFullPath);
 
             pConf->Write ( _T ( "LOGGERgpsLogfileFullPath" ), gpsLogfileFullPath );
 	    wxLogMessage(_T ("LOGGERgpsLogfileFullPath: ") + gpsLogfileFullPath);
 
             pConf->Write ( _T ( "LOGGERaisLogfileFullPath" ), aisLogfileFullPath );
 	    wxLogMessage(_T ("LOGGERaisLogfileFullPath: ") + aisLogfileFullPath);
-/*
-            pConf->Write ( _T ( "GRIBUseHiDef" ), m_bGRIBUseHiDef );
-            pConf->Write ( _T ( "ShowGRIBIcon" ), m_bGRIBShowIcon );
 
-            pConf->Write ( _T ( "GRIBDialogSizeX" ),  m_grib_dialog_sx );
-            pConf->Write ( _T ( "GRIBDialogSizeY" ),  m_grib_dialog_sy );
-            pConf->Write ( _T ( "GRIBDialogPosX" ),   m_grib_dialog_x );
-            pConf->Write ( _T ( "GRIBDialogPosY" ),   m_grib_dialog_y );
+            pConf->Write ( _T ( "LOGGERcombinedLogEnabled" ), combinedLogEnabled );
+	    wxLogMessage(_T ("LOGGERcombinedLogEnabled: ") + combinedLogEnabled);
 
-            pConf->SetPath ( _T ( "/Directories" ) );
-            pConf->Write ( _T ( "GRIBDirectory" ), m_grib_dir );
-*/
+            pConf->Write ( _T ( "LOGGERgpsLogEnabled" ), gpsLogEnabled );
+	    wxLogMessage(_T ("LOGGERgpsLogEnabled: ") + gpsLogEnabled);
+
+            pConf->Write ( _T ( "LOGGERaisLogEnabled" ), aisLogEnabled );
+	    wxLogMessage(_T ("LOGGERaisLogEnabled: ") + aisLogEnabled);
+
             return true;
       }
       else

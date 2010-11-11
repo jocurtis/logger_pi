@@ -45,9 +45,13 @@
 
 #include "nmea0183/nmea0183.h"
 
-#define NMEA_LOGFILE_FULL_PATH_DEFAULT "%Y-%m-%d.nmea"
+#define COMBINED_LOGFILE_FULL_PATH_DEFAULT "%Y-%m-%d.nmea"
 #define GPS_LOGFILE_FULL_PATH_DEFAULT "gps.%Y-%m-%d.nmea"
 #define AIS_LOGFILE_FULL_PATH_DEFAULT "ais.%Y-%m-%d.nmea"
+
+#define GPS_LOG_ENABLED_DEFAULT TRUE
+#define AIS_LOG_ENABLED_DEFAULT TRUE
+#define COMBINED_LOG_ENABLED_DEFAULT FALSE
 
 class ConfigDialogImpl;
 
@@ -82,9 +86,13 @@ public:
       void SetNMEASentence(wxString &sentence);
       void OnContextMenuItemCallback(int id);
 
-      wxString nmeaLogfileFullPath;
+      wxString combinedLogfileFullPath;
       wxString gpsLogfileFullPath;
       wxString aisLogfileFullPath;
+
+      bool combinedLogEnabled;
+      bool gpsLogEnabled;
+      bool aisLogEnabled;
 
 private:
 

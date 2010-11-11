@@ -9,13 +9,14 @@
 #define __ConfigDialog__
 
 #include <wx/string.h>
-#include <wx/stattext.h>
+#include <wx/checkbox.h>
 #include <wx/gdicmn.h>
 #include <wx/font.h>
 #include <wx/colour.h>
 #include <wx/settings.h>
 #include <wx/filepicker.h>
 #include <wx/sizer.h>
+#include <wx/statbox.h>
 #include <wx/button.h>
 #include <wx/dialog.h>
 
@@ -30,12 +31,12 @@ class ConfigDialog : public wxDialog
 	private:
 	
 	protected:
-		wxStaticText* m_staticText4;
+		wxCheckBox* m_gps_log_enabled;
 		wxFilePickerCtrl* m_gps_log_location_picker;
-		wxStaticText* m_staticText2;
+		wxCheckBox* m_ais_log_enabled;
 		wxFilePickerCtrl* m_ais_log_location_picker;
-		wxStaticText* m_staticText3;
-		wxFilePickerCtrl* m_nmea_log_location_picker;
+		wxCheckBox* m_combined_log_enabled;
+		wxFilePickerCtrl* m_combined_log_location_picker;
 		wxButton* m_ok_button;
 		wxButton* m_cancel_button;
 		
