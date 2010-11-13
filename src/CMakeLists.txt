@@ -78,41 +78,7 @@ SET(SRC_DEMO
  	)
 
 SET(SRC_NMEA0183
-		nmea0183/LatLong.hpp
-		nmea0183/latlong.cpp
-		nmea0183/long.cpp
-		nmea0183/nmea0183.cpp
-		nmea0183/nmea0183.hpp
-		nmea0183/Response.hpp
-		nmea0183/response.cpp
-		nmea0183/RMB.hpp
-		nmea0183/rmb.cpp
-		nmea0183/Sentence.hpp
-		nmea0183/sentence.cpp
-		nmea0183/talkerid.cpp
-		nmea0183/RMC.HPP
-		nmea0183/rmc.cpp
-		nmea0183/hexvalue.cpp
-		nmea0183/lat.cpp
-		nmea0183/expid.cpp
-		nmea0183/wpl.hpp
-		nmea0183/wpl.cpp
-		nmea0183/rte.hpp
-		nmea0183/rte.cpp
-		nmea0183/hdt.hpp
-		nmea0183/hdt.cpp
-		nmea0183/hdg.hpp
-		nmea0183/hdg.cpp
-		nmea0183/hdm.hpp
-		nmea0183/hdm.cpp
-		nmea0183/gll.hpp
-		nmea0183/gll.cpp
-		nmea0183/vtg.hpp
-		nmea0183/vtg.cpp
-		nmea0183/gga.hpp
-		nmea0183/gga.cpp
-		nmea0183/gsv.hpp
-		nmea0183/gsv.cpp
+
 	)
 INCLUDE_DIRECTORIES(nmea0183)
 
