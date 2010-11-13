@@ -53,6 +53,12 @@
 #define AIS_LOG_ENABLED_DEFAULT TRUE
 #define COMBINED_LOG_ENABLED_DEFAULT FALSE
 
+enum NMEASentenceType {
+    GPS,
+    AIS,
+    UNKNOWN
+};
+
 class ConfigDialogImpl;
 
 //----------------------------------------------------------------------------------------------------------
@@ -102,28 +108,12 @@ private:
 
       int               m_show_id;
       int               m_hide_id;
+
+      NMEA0183          m_NMEA0183;
+      
+      NMEASentenceType determineNMEASentenceType(wxString sentence);
+      void appendSentenceToFile(wxString fileFullPath, wxString sentence);
 };
-
-
-
-class LoggerWindow : public wxWindow
-{
-public:
-      LoggerWindow(wxWindow *pparent, wxWindowID id);
-      ~LoggerWindow();
-
-      void OnPaint(wxPaintEvent& event);
-      void SetSentence(wxString &sentence);
-      void OnSize(wxSizeEvent& event);
-
-      NMEA0183        m_NMEA0183;                 // Used to parse NMEA Sentences
-
-      wxString          m_NMEASentence;
-      double            mLat, mLon, mSog, mCog, mVar;
-
-DECLARE_EVENT_TABLE()
-};
-
 
 #endif
 

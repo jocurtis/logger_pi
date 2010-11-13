@@ -157,26 +157,55 @@ Logs all incoming NMEA sentences to a log file.");
 
 void logger_pi::SetNMEASentence(wxString &sentence)
 {
-  wxDateTime now = wxDateTime::Now();
-  
-
 	// TODO: * Differentiate between AIS AND GPS
 	//	 * Clean up code and submit?
 
-
-  if (gpsLogEnabled) {
-	  // format the gps path
-	  wxString gpsLogfileFullPathFormatted = now.Format(gpsLogfileFullPath, wxDateTime::CET);
-
-	  // get the base dir and create if necessary
-	  wxString baseDir = ::wxPathOnly(gpsLogfileFullPathFormatted);
-	  wxFileName::Mkdir(baseDir, 0755, wxPATH_MKDIR_FULL);
-	  
-	  // log it
-	  wxFile nmeaLogOut(gpsLogfileFullPathFormatted, wxFile::write_append);
-	  nmeaLogOut.Write(sentence);
-	  nmeaLogOut.Close();
+  switch (determineNMEASentenceType(sentence)) {
+    case GPS:
+	  if (gpsLogEnabled) {
+		appendSentenceToFile(gpsLogfileFullPath, sentence);
+	  }
+    break;
+    case AIS:
+	if (aisLogEnabled) {
+		appendSentenceToFile(aisLogfileFullPath, sentence);
+	}
+    break;
+    default:
+    break;
   }
+
+  if (combinedLogEnabled) {
+    appendSentenceToFile(combinedLogfileFullPath, sentence);
+  }
+
+
+}
+
+void logger_pi::appendSentenceToFile(wxString fileFullPath, wxString sentence) {
+  wxDateTime now = wxDateTime::Now();
+
+  // format the gps path
+  wxString logfileFullPathFormatted = now.Format(fileFullPath, wxDateTime::CET);
+
+  // get the base dir and create if necessary
+  wxString baseDir = ::wxPathOnly(logfileFullPathFormatted);
+  wxFileName::Mkdir(baseDir, 0755, wxPATH_MKDIR_FULL);
+  
+  // log it
+  wxFile logOut(logfileFullPathFormatted, wxFile::write_append);
+  logOut.Write(sentence);
+  logOut.Close();
+}
+
+NMEASentenceType logger_pi::determineNMEASentenceType(wxString sentence) {
+    if (sentence.StartsWith(wxT("$GP"), NULL)) {
+        return GPS;
+    } else if (sentence.StartsWith(wxT("!AIVDM"), NULL)) {
+        return AIS;
+    } else {
+        return UNKNOWN;
+    }
 }
 
 
