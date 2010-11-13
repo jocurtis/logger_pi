@@ -32,7 +32,6 @@
   #include "wx/wx.h"
 #endif //precompiled headers
 
-#include <wx/aui/aui.h>
 #include <wx/datetime.h>
 #include <wx/file.h>
 #include <wx/filefn.h>

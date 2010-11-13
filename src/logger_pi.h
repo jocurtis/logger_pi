@@ -43,8 +43,6 @@
 #include <wx/fileconf.h>
 #include "ocpn_plugin.h"
 
-#include "nmea0183/nmea0183.h"
-
 #define COMBINED_LOGFILE_FULL_PATH_DEFAULT "%Y-%m-%d.nmea"
 #define GPS_LOGFILE_FULL_PATH_DEFAULT "gps.%Y-%m-%d.nmea"
 #define AIS_LOGFILE_FULL_PATH_DEFAULT "ais.%Y-%m-%d.nmea"
@@ -108,8 +106,6 @@ private:
 
       int               m_show_id;
       int               m_hide_id;
-
-      NMEA0183          m_NMEA0183;
       
       NMEASentenceType determineNMEASentenceType(wxString sentence);
       void appendSentenceToFile(wxString fileFullPath, wxString sentence);
