@@ -68,7 +68,7 @@ FIND_PACKAGE(Gettext REQUIRED)
 # header files and cpp/c files and CMake will sort them out
 
 
-SET(SRC_DEMO
+SET(SRC_LOGGER
                 logger_pi.h
  		logger_pi.cpp
 		ConfigDialog.h
@@ -77,12 +77,7 @@ SET(SRC_DEMO
 		ConfigDialogImpl.cpp
  	)
 
-SET(SRC_NMEA0183
-
-	)
-INCLUDE_DIRECTORIES(nmea0183)
-
-ADD_LIBRARY(${PACKAGE_NAME} SHARED ${SRC_DEMO} ${SRC_NMEA0183} )
+ADD_LIBRARY(${PACKAGE_NAME} SHARED ${SRC_LOGGER} )
 
 IF(WIN32)
   SET(OPENCPN_IMPORT_LIB "../../../${CMAKE_CFG_INTDIR}/${PARENT}")

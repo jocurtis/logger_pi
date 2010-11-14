@@ -5,9 +5,6 @@
  * Author:   Joseph Curtis
  *
  ***************************************************************************
- *   Copyright (C) 2010 by David S. Register   *
- *   $EMAIL$   *
- *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
  *   the Free Software Foundation; either version 2 of the License, or     *
@@ -31,14 +28,14 @@
 #include "wx/wxprec.h"
 
 #ifndef  WX_PRECOMP
-  #include "wx/wx.h"
+#include "wx/wx.h"
 #endif //precompiled headers
 
-#define     PLUGIN_VERSION_MAJOR    1
-#define     PLUGIN_VERSION_MINOR    0
+#define PLUGIN_VERSION_MAJOR    1
+#define PLUGIN_VERSION_MINOR    0
 
-#define     MY_API_VERSION_MAJOR    1
-#define     MY_API_VERSION_MINOR    1
+#define MY_API_VERSION_MAJOR    1
+#define MY_API_VERSION_MINOR    1
 
 #include <wx/fileconf.h>
 #include "ocpn_plugin.h"
@@ -52,9 +49,9 @@
 #define COMBINED_LOG_ENABLED_DEFAULT FALSE
 
 enum NMEASentenceType {
-    GPS,
-    AIS,
-    UNKNOWN
+  GPS,
+  AIS,
+  UNKNOWN
 };
 
 class ConfigDialogImpl;
@@ -63,52 +60,49 @@ class ConfigDialogImpl;
 //    The PlugIn Class Definition
 //----------------------------------------------------------------------------------------------------------
 
-
-class logger_pi : public opencpn_plugin
-{
-public:
-      logger_pi(void *ppimgr):opencpn_plugin(ppimgr){}
-
-//    The required PlugIn Methods
-      int Init(void);
-      bool DeInit(void);
-
-      int GetAPIVersionMajor();
-      int GetAPIVersionMinor();
-      int GetPlugInVersionMajor();
-      int GetPlugInVersionMinor();
-
-      wxString GetCommonName();
-      wxString GetShortDescription();
-      wxString GetLongDescription();
-
-      bool LoadConfig(void);
-      bool SaveConfig(void);
-
-//    The optional method overrides
-
-      void SetNMEASentence(wxString &sentence);
-      void OnContextMenuItemCallback(int id);
-
-      wxString combinedLogfileFullPath;
-      wxString gpsLogfileFullPath;
-      wxString aisLogfileFullPath;
-
-      bool combinedLogEnabled;
-      bool gpsLogEnabled;
-      bool aisLogEnabled;
-
-private:
-
-      wxWindow         *m_parent_window;
-      wxFileConfig     *m_pconfig;
-      ConfigDialogImpl *m_config_dialog;
-
-      int               m_show_id;
-      int               m_hide_id;
-      
-      NMEASentenceType determineNMEASentenceType(wxString sentence);
-      void appendSentenceToFile(wxString fileFullPath, wxString sentence);
+class logger_pi : public opencpn_plugin {
+ public:
+ logger_pi(void *ppimgr):opencpn_plugin(ppimgr){}
+  
+  //    The required PlugIn Methods
+  int Init(void);
+  bool DeInit(void);
+  
+  int GetAPIVersionMajor();
+  int GetAPIVersionMinor();
+  int GetPlugInVersionMajor();
+  int GetPlugInVersionMinor();
+  
+  wxString GetCommonName();
+  wxString GetShortDescription();
+  wxString GetLongDescription();
+  
+  bool LoadConfig(void);
+  bool SaveConfig(void);
+  
+  //    The optional method overrides
+  
+  void SetNMEASentence(wxString &sentence);
+  void OnContextMenuItemCallback(int id);
+  
+  wxString combinedLogfileFullPath;
+  wxString gpsLogfileFullPath;
+  wxString aisLogfileFullPath;
+  
+  bool combinedLogEnabled;
+  bool gpsLogEnabled;
+  bool aisLogEnabled;
+  
+ private:
+  wxWindow *m_parent_window;
+  wxFileConfig *m_pconfig;
+  ConfigDialogImpl *m_config_dialog;
+  
+  int m_show_id;
+  int m_hide_id;
+  
+  NMEASentenceType determineNMEASentenceType(wxString sentence);
+  void appendSentenceToFile(wxString fileFullPath, wxString sentence);
 };
 
 #endif
