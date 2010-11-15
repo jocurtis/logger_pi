@@ -31,11 +31,11 @@
 #include "wx/wx.h"
 #endif //precompiled headers
 
-#define PLUGIN_VERSION_MAJOR    1
-#define PLUGIN_VERSION_MINOR    0
+#define PLUGIN_VERSION_MAJOR    0
+#define PLUGIN_VERSION_MINOR    2
 
-#define MY_API_VERSION_MAJOR    1
-#define MY_API_VERSION_MINOR    1
+//#define MY_API_VERSION_MAJOR    1
+//#define MY_API_VERSION_MINOR    2
 
 #include <wx/fileconf.h>
 #include "ocpn_plugin.h"

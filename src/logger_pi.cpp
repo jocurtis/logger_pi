@@ -108,11 +108,11 @@ bool logger_pi::DeInit(void) {
 }
 
 int logger_pi::GetAPIVersionMajor() {
-  return MY_API_VERSION_MAJOR;
+  return API_VERSION_MAJOR;
 }
 
 int logger_pi::GetAPIVersionMinor() {
-  return MY_API_VERSION_MINOR;
+  return API_VERSION_MINOR;
 }
 
 int logger_pi::GetPlugInVersionMajor() {
